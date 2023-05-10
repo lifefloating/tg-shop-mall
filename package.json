@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "start": "NODE_ENV=development webpack-dev-server --config webpack.dev.js",
+    "start": "webpack-dev-server --config webpack.dev.js",
     "prebuild": "rm -rf dist",
-    "build": "NODE_ENV=production webpack --display-error-details --config webpack.prod.js"
+    "build": "webpack --display-error-details --config webpack.prod.js"
   },
   "author": "",
   "license": "ISC",
