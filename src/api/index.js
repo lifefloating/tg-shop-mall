@@ -5,22 +5,42 @@ const instance = axios.create({
   timeout: 60 * 1000
 })
 
+instance.interceptors.request.use(
+  (config) => {
+    return config
+  },
+  (error) => {
+    return Promise.reject(error.response)
+  }
+)
+
+// 错误处理
+instance.interceptors.response.use(
+  function (response) {
+    if (response.data.status !== 'SUCCESS') {
+      return Promise.reject(response.data.desc || '出错了，请稍后再试。')
+    }
+    return response.data
+  },
+  (error) => {}
+)
+
 // 商品列表
-const productList = (params) => instance.post('/api/productList', params)
+const apiProductList = (params) => instance.post('/api/productList', params)
 
 // 加入购物车
-const addCart = (params) => instance.post('/api/addCart', params)
+const apiAddCart = (params) => instance.post('/api/addCart', params)
 
 // 移出购物车
-const removeCart = (params) => instance.post('/api/removeCart', params)
+const apiRemoveCart = (params) => instance.post('/api/removeCart', params)
 
 // 购物车列表
-const cartList = (params) => instance.post('/api/cartList', params)
+const apiCartList = (params) => instance.post('/api/cartList', params)
 
 // 创建订单
-const order = (params) => instance.post('/api/order', params)
+const apiOrder = (params) => instance.post('/api/order', params)
 
 // 订单列表
-const orderList = (params) => instance.post('/api/orderList', params)
+const apiOrderList = (params) => instance.post('/api/orderList', params)
 
-export { productList, addCart, removeCart, cartList, order, orderList }
+export { apiProductList, apiAddCart, apiRemoveCart, apiCartList, apiOrder, apiOrderList }

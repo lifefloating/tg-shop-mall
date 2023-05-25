@@ -3,26 +3,26 @@
     <v-app-bar :clipped-left="$vuetify.breakpoint.lgAndUp" app color="primary" dark>
       <v-toolbar-title style="width: 350px">
         <v-img src="/static/logo.svg" style="width: 24px; display: inline-block; vertical-align: middle"></v-img>
-        <a href="/" class="white--text" style="text-decoration: none; vertical-align: middle">&nbsp;印度小店</a>
+        <router-link to="/" class="white--text" style="text-decoration: none; vertical-align: middle">&nbsp;印度小店</router-link>
       </v-toolbar-title>
       <v-spacer />
-      <v-btn href="/cart" icon>
+      <router-link to="/cart" icon>
         <v-badge content="2" value="2" color="green" overlap>
           <v-icon>mdi-cart</v-icon>
         </v-badge>
-      </v-btn>
+      </router-link>
     </v-app-bar>
     <v-main>
       <v-bottom-navigation :value="activeBtn" color="primary" horizontal>
-        <v-btn href="/" class="v-btn">
+        <router-link to="/" class="v-btn" active-class="v-btn--active" exact>
           <span>主页</span>
-        </v-btn>
-        <v-btn href="/product" class="v-btn">
+        </router-link>
+        <router-link to="/product" class="v-btn" active-class="v-btn--active" exact>
           <span>产品</span>
-        </v-btn>
-        <v-btn href="/blog" class="v-btn">
+        </router-link>
+        <router-link to="/blog" class="v-btn" active-class="v-btn--active" exact>
           <span>资讯</span>
-        </v-btn>
+        </router-link>
       </v-bottom-navigation>
     </v-main>
     <router-view />

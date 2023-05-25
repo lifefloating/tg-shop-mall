@@ -10,7 +10,7 @@ import Layout from '@/components/Layout'
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   routes: [
     {
       path: '/',
@@ -22,17 +22,17 @@ export default new Router({
           name: 'Home'
         },
         {
-          path: '/shop',
+          path: 'shop',
           component: Shop,
           name: 'Shop'
         },
         {
-          path: '/product',
+          path: 'product',
           component: Product,
           name: 'Product'
         },
         {
-          path: '/blog',
+          path: 'blog',
           component: Blog,
           name: 'Blog'
         },
@@ -49,5 +49,16 @@ export default new Router({
       ]
     }
   ],
-  mode: 'history'
+  mode: 'hash'
 })
+router.beforeEach((to, from, next) => {
+  if (from.query.user_id && !to.query.user_id) {
+    console.log(123123, from.path !== to.path && !!from.query.user_id, from.path, to.path)
+    to.query.user_id = from.query.user_id
+    next(to)
+  } else {
+    next()
+  }
+})
+
+export default router
