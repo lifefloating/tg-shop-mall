@@ -2,7 +2,8 @@
   <div>
     <v-container>
       <p class="display-3 font-weight-light text-center pa-4">购物车</p>
-      <v-row>
+      <v-skeleton-loader type="list-item-avatar-three-line" v-if="cartLoading"> </v-skeleton-loader>
+      <v-row v-else>
         <v-col :cols="12">
           <v-simple-table>
             <template v-slot:default>
@@ -11,11 +12,17 @@
                   <th class="text-center">商品</th>
                   <th class="text-center">价格</th>
                   <th class="text-center">数量</th>
-                  <th class="text-center">总计</th>
+                  <th class="text-center">总价</th>
                   <th class="text-center"></th>
                 </tr>
               </thead>
-              <tbody>
+
+              <tbody v-if="cartList.length === 0">
+                <tr>
+                  <td colspan="5" style="height: 200px; font-size: 16px; color: #ccc; text-align: center">购物车空空如也</td>
+                </tr>
+              </tbody>
+              <tbody v-else>
                 <tr v-for="(item, index) in cartList" :key="index">
                   <td>
                     <v-list-item key="1">
@@ -29,7 +36,7 @@
                       </v-list-item-content>
                     </v-list-item>
                   </td>
-                  <td>￥{{ item.product_price }}</td>
+                  <td>￥{{ item.product_price | price }}</td>
                   <td>
                     <div class="d-flex">
                       <div
@@ -42,6 +49,8 @@
                           align-items: center;
                           justify-content: center;
                           border: 1px solid #ccc;
+                          cursor: pointer;
+                          user-select: none;
                         "
                         @click="
                           () => {
@@ -62,6 +71,8 @@
                           align-items: center;
                           justify-content: center;
                           border: 1px solid #ccc;
+                          cursor: pointer;
+                          user-select: none;
                         "
                         @click="() => item.quantity++"
                       >
@@ -69,83 +80,43 @@
                       </div>
                     </div>
                   </td>
-                  <td style="min-width: 56px">{{ +item.quantity * +item.product_price }}</td>
+                  <td style="min-width: 56px">{{ (+item.quantity * +item.product_price) | price }}</td>
                   <td><v-btn color="error" raised rounded text @click="() => apiRemoveCart({ product_id: item.product_id }, true)">删除</v-btn></td>
                 </tr>
               </tbody>
             </template>
           </v-simple-table>
         </v-col>
-        <v-col :cols="12" style="background-color: lightgray">
-          <p class="headline">Order Summary</p>
-          <p class="overline">Shipping and additional costs are calculated based on values you have entered.</p>
+
+        <v-col :cols="12" style="background-color: lightgray" v-if="cartList && cartList.length">
+          <p class="headline">结算</p>
+          <p class="overline"></p>
           <v-simple-table>
             <template v-slot:default>
               <tbody>
                 <tr>
-                  <td>Order Subtotal</td>
-                  <td class="text-right" style="width: 50px">$160.00</td>
+                  <td>小计</td>
+                  <td class="text-right" style="width: 50px">￥{{ subtotal | price }}</td>
                 </tr>
                 <tr>
-                  <td>Shipping Charges</td>
-                  <td class="text-right" style="width: 50px">$10.00</td>
+                  <td>邮费</td>
+                  <td class="text-right" style="width: 50px">￥0.00</td>
                 </tr>
                 <tr>
-                  <td>Tax</td>
-                  <td class="text-right" style="width: 50px">$5.00</td>
-                </tr>
-                <tr>
-                  <td>Total</td>
-                  <td class="text-right" style="width: 50px"><b>$175.00</b></td>
+                  <td>总计</td>
+                  <td class="text-right" style="width: 50px">
+                    <b>￥{{ subtotal | price }}</b>
+                  </td>
                 </tr>
               </tbody>
             </template>
           </v-simple-table>
           <div class="text-center">
-            <v-btn class="primary white--text mt-5" outlined>PROCEED TO PAY</v-btn>
+            <v-btn class="primary white--text mt-5" outlined>支付</v-btn>
           </div>
         </v-col>
       </v-row>
     </v-container>
-    <v-card class="accent">
-      <v-container>
-        <v-row no-gutters>
-          <v-col class="col-12 col-md-4 col-sm-12">
-            <v-row>
-              <v-col class="col-12 col-sm-3 pr-4 hidden-sm-only" align="right">
-                <v-icon class="display-2">mdi-truck</v-icon>
-              </v-col>
-              <v-col class="col-12 col-sm-9 pr-4">
-                <h3 class="font-weight-light">FREE SHIPPING & RETURN</h3>
-                <p class="font-weight-thin">Free Shipping over $300</p>
-              </v-col>
-            </v-row>
-          </v-col>
-          <v-col class="col-12 col-md-4 col-sm-12">
-            <v-row>
-              <v-col class="col-12 col-sm-3 pr-4" align="right">
-                <v-icon class="display-2">mdi-cash-usd</v-icon>
-              </v-col>
-              <v-col class="col-12 col-sm-9 pr-4">
-                <h3 class="font-weight-light">MONEY BACK GUARANTEE</h3>
-                <p class="font-weight-thin">30 Days Money Back Guarantee</p>
-              </v-col>
-            </v-row>
-          </v-col>
-          <v-col class="col-12 col-md-4 col-sm-12">
-            <v-row>
-              <v-col class="col-12 col-sm-3 pr-4" align="right">
-                <v-icon class="display-2">mdi-headset</v-icon>
-              </v-col>
-              <v-col class="col-12 col-sm-9 pr-4">
-                <h3 class="font-weight-light">020-800-456-747</h3>
-                <p class="font-weight-thin">24/7 Available Support</p>
-              </v-col>
-            </v-row>
-          </v-col>
-        </v-row>
-      </v-container>
-    </v-card>
   </div>
 </template>
 <script>

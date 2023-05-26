@@ -7,7 +7,7 @@
       </v-toolbar-title>
       <v-spacer />
       <router-link to="/cart" icon>
-        <v-badge content="2" value="2" color="green" overlap>
+        <v-badge :content="cartList.length" :value="cartList.length" color="green" overlap>
           <v-icon>mdi-cart</v-icon>
         </v-badge>
       </router-link>
@@ -17,7 +17,7 @@
         <router-link to="/" class="v-btn" active-class="v-btn--active" exact>
           <span>主页</span>
         </router-link>
-        <router-link to="/product" class="v-btn" active-class="v-btn--active" exact>
+        <router-link to="/shop" class="v-btn" active-class="v-btn--active" exact>
           <span>产品</span>
         </router-link>
         <router-link to="/blog" class="v-btn" active-class="v-btn--active" exact>
@@ -27,6 +27,45 @@
     </v-main>
     <router-view />
     <v-footer :padless="true">
+      <v-card class="accent">
+        <v-container>
+          <v-row no-gutters>
+            <v-col class="col-12 col-md-4 col-sm-12">
+              <v-row>
+                <v-col class="col-3 col-sm-3 pr-4 hidden-sm-only" align="right">
+                  <v-icon class="display-2">mdi-truck</v-icon>
+                </v-col>
+                <v-col class="col-9 col-sm-9 pr-4">
+                  <h3 class="font-weight-light">物流无忧</h3>
+                  <p class="font-weight-thin">免费送货和退货</p>
+                </v-col>
+              </v-row>
+            </v-col>
+            <v-col class="col-12 col-md-4 col-sm-12">
+              <v-row>
+                <v-col class="col-3 col-sm-3 pr-4" align="right">
+                  <v-icon class="display-2">mdi-cash-usd</v-icon>
+                </v-col>
+                <v-col class="col-9 col-sm-9 pr-4">
+                  <h3 class="font-weight-light">购物无忧</h3>
+                  <p class="font-weight-thin">质量问题保证退款</p>
+                </v-col>
+              </v-row>
+            </v-col>
+            <v-col class="col-12 col-md-4 col-sm-12">
+              <v-row>
+                <v-col class="col-3 col-sm-3 pr-4" align="right">
+                  <v-icon class="display-2">mdi-headset</v-icon>
+                </v-col>
+                <v-col class="col-9 col-sm-9 pr-4">
+                  <h3 class="font-weight-light">售后无忧</h3>
+                  <p class="font-weight-thin">热线：020-800-456-747</p>
+                </v-col>
+              </v-row>
+            </v-col>
+          </v-row>
+        </v-container>
+      </v-card>
       <v-card flat tile width="100%" class="secondary white--text text-center">
         <v-card-text>
           <v-btn class="mx-4 white--text" icon>
@@ -58,12 +97,15 @@
   </v-app>
 </template>
 <script>
+import cart from '@/mixins/cart'
+
 export default {
   data() {
     return {
       activeBtn: null
     }
   },
+  mixins: [cart],
   created() {
     switch (this.$route.name) {
       case 'Home':
@@ -78,6 +120,7 @@ export default {
       default:
         break
     }
+    this.apiCartList()
   }
 }
 </script>

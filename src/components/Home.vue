@@ -34,7 +34,9 @@
                     </v-card-text>
 
                     <div class="text-center">
-                      <v-btn class="ma-2" outlined color="info"> 查看商品 </v-btn>
+                      <router-link :to="{ name: 'Product', query: { product_id: item.product_id } }">
+                        <v-btn class="ma-2" outlined color="info"> 查看商品 </v-btn>
+                      </router-link>
                     </div>
                   </v-card>
                 </v-hover>
@@ -58,7 +60,7 @@ export default {
     }
   },
   mixins: [cartMixin],
-  mounted() {
+  created() {
     this.apiProductList()
   },
   methods: {

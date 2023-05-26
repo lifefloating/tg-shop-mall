@@ -1,4 +1,5 @@
 import axios from 'axios'
+import snackbar from '@/mixins/snackbar'
 
 const instance = axios.create({
   baseURL: process.env.BASE_API,
@@ -18,11 +19,15 @@ instance.interceptors.request.use(
 instance.interceptors.response.use(
   function (response) {
     if (response.data.status !== 'SUCCESS') {
+      snackbar.methods.showSB({ text: response.data.desc || '出错了，请稍后再试。', type: 'error' })
       return Promise.reject(response.data.desc || '出错了，请稍后再试。')
     }
     return response.data
   },
-  (error) => {}
+  (error) => {
+    snackbar.methods.showSB({ text: '出错了，请稍后再试。', type: 'error' })
+    return Promise.reject('出错了，请稍后再试。')
+  }
 )
 
 // 商品列表
@@ -43,4 +48,7 @@ const apiOrder = (params) => instance.post('/api/order', params)
 // 订单列表
 const apiOrderList = (params) => instance.post('/api/orderList', params)
 
-export { apiProductList, apiAddCart, apiRemoveCart, apiCartList, apiOrder, apiOrderList }
+// 产品详情
+const apiProductDetail = (params) => instance.post('api/productDetail', params)
+
+export { apiProductList, apiAddCart, apiRemoveCart, apiCartList, apiOrder, apiOrderList, apiProductDetail }
