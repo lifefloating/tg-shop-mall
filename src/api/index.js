@@ -30,8 +30,14 @@ instance.interceptors.response.use(
   }
 )
 
+// 轮播图
+const apiBanner = (params) => instance.get('/api/slider', { params })
+
 // 商品列表
 const apiProductList = (params) => instance.post('/api/productList', params)
+
+// 商品列表搜索
+const apiProductSearch = (params) => instance.post('/api/productSearch', params)
 
 // 加入购物车
 const apiAddCart = (params) => instance.post('/api/addCart', params)
@@ -51,4 +57,4 @@ const apiOrderList = (params) => instance.post('/api/orderList', params)
 // 产品详情
 const apiProductDetail = (params) => instance.post('api/productDetail', params)
 
-export { apiProductList, apiAddCart, apiRemoveCart, apiCartList, apiOrder, apiOrderList, apiProductDetail }
+export { apiBanner, apiProductList, apiProductSearch, apiAddCart, apiRemoveCart, apiCartList, apiOrder, apiOrderList, apiProductDetail }

@@ -4,9 +4,12 @@
       <div class="row">
         <div class="col-md-3 col-sm-3 col-xs-12">
           <v-card outlined>
-            <v-card-title>Filters</v-card-title>
+            <v-card-title>筛选</v-card-title>
             <v-divider></v-divider>
-            <template>
+            <v-col cols="12">
+              <v-text-field v-model="keyword" label="搜索关键词" outlined dense></v-text-field>
+            </v-col>
+            <!-- <template>
               <v-treeview :items="items" :open="[1]" :active="[5]" :selected-color="'#fff'" activatable open-on-click dense></v-treeview>
             </template>
             <v-divider></v-divider>
@@ -41,51 +44,57 @@
               <v-checkbox label="XL" hide-details dense></v-checkbox>
               <v-checkbox label="XXL" hide-details dense></v-checkbox>
               <v-checkbox label="XXXL" hide-details dense></v-checkbox>
-            </v-container>
+            </v-container> -->
+            <v-col cols="12" align="right">
+              <v-btn color="primary" raised @click="apiProductSearch">确认</v-btn>
+            </v-col>
           </v-card>
         </div>
+
         <div class="col-md-9 col-sm-9 col-xs-12">
           <!-- <v-breadcrumbs class="pb-0" :items="breadcrums"></v-breadcrumbs> -->
 
-          <v-row dense>
-            <!-- <v-col cols="12" sm="8" class="pl-6 pt-6">
+          <!-- <v-row dense>
+            <v-col cols="12" sm="8" class="pl-6 pt-6">
               <small>Showing 1-12 of 200 products</small>
-            </v-col> -->
+            </v-col>
             <v-col cols="12" sm="4">
               <v-select class="pa-0" v-model="select" :items="options" style="margin-bottom: -20px" outlined dense></v-select>
             </v-col>
-          </v-row>
+          </v-row> -->
 
-          <v-divider></v-divider>
-
-          <div class="row text-center">
-            <div class="col-md-3 col-sm-6 col-xs-12" :key="index" v-for="(item, index) in products">
-              <v-hover v-slot:default="{ hover }">
-                <v-card class="mx-auto" color="grey lighten-4" max-width="600">
-                  <v-img class="white--text align-end" :aspect-ratio="16 / 9" height="200px" :src="`data:image/jpg;base64,${item.product_image}`">
-                    <v-card-title>{{ item.product_name }} </v-card-title>
-                    <v-expand-transition>
-                      <router-link
-                        v-if="hover"
-                        :to="{ name: 'Product', query: { product_id: item.product_id } }"
-                        class="d-flex transition-fast-in-fast-out white darken-2 v-card--reveal display-3 white--text"
-                        style="height: 100%"
-                      >
-                        <v-btn v-if="hover" class="" outlined>查看</v-btn>
-                      </router-link>
-                    </v-expand-transition>
-                  </v-img>
-                  <v-card-text class="text--primary">
-                    <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{ item.product_name }}</div>
-                    <div>￥{{ item.product_price }}</div>
-                  </v-card-text>
-                </v-card>
-              </v-hover>
+          <!-- <v-divider></v-divider> -->
+          <v-card :loading="loading">
+            <div class="row text-center ma-0">
+              <div class="col-md-3 col-sm-6 col-xs-12" :key="index" v-for="(item, index) in products">
+                <v-hover v-slot:default="{ hover }">
+                  <v-card class="mx-auto" color="grey lighten-4" max-width="600">
+                    <v-img class="white--text align-end" :aspect-ratio="16 / 9" height="200px" :src="`data:image/jpg;base64,${item.product_image}`">
+                      <v-card-title>{{ item.product_name }} </v-card-title>
+                      <v-expand-transition>
+                        <router-link
+                          v-if="hover"
+                          :to="{ name: 'Product', query: { product_id: item.product_id } }"
+                          class="d-flex transition-fast-in-fast-out white darken-2 v-card--reveal display-3 white--text"
+                          style="height: 100%"
+                        >
+                          <v-btn v-if="hover" class="" outlined>查看</v-btn>
+                        </router-link>
+                      </v-expand-transition>
+                    </v-img>
+                    <v-card-text class="text--primary">
+                      <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{ item.product_name }}</div>
+                      <div>￥{{ item.product_price }}</div>
+                    </v-card-text>
+                  </v-card>
+                </v-hover>
+              </div>
             </div>
-          </div>
-          <!-- <div class="text-center mt-12">
-            <v-pagination v-model="page" :length="6"></v-pagination>
-          </div> -->
+
+            <!-- <div class="text-center mt-12">
+                      <v-pagination v-model="page" :length="6"></v-pagination>
+                    </div> -->
+          </v-card>
         </div>
       </div>
     </v-container>
@@ -102,11 +111,12 @@
 }
 </style>
 <script>
-import { apiProductList } from '@/api'
+import { apiProductSearch } from '@/api'
 import cartMixin from '@/mixins/cart'
 
 export default {
   data: () => ({
+    keyword: '',
     range: [0, 10000],
     select: 'Popularity',
     options: ['Default', 'Popularity', 'Relevance', 'Price: Low to High', 'Price: High to Low'],
@@ -151,16 +161,22 @@ export default {
         ]
       }
     ],
-    products: []
+    products: [],
+    loading: false
   }),
   mixins: [cartMixin],
   created() {
-    this.apiProductList()
+    this.apiProductSearch()
   },
   methods: {
-    async apiProductList() {
-      const data = await apiProductList()
-      this.products = data.data.product_list
+    async apiProductSearch() {
+      this.loading = true
+      try {
+        const data = await apiProductSearch({ keyword: this.keyword })
+        this.products = data.data.product_list
+      } finally {
+        this.loading = false
+      }
     }
   }
 }

@@ -1,18 +1,7 @@
 <template>
   <div>
-    <v-carousel hide-delimiters>
-      <v-carousel-item :src="require('../assets/img/home/slider4.jpg')">
-        <v-row class="fill-height" align="center" justify="center"> </v-row>
-      </v-carousel-item>
-      <v-carousel-item :src="require('../assets/img/home/slider2.jpg')">
-        <v-row class="fill-height" align="center" justify="center"> </v-row>
-      </v-carousel-item>
-      <v-carousel-item :src="require('../assets/img/home/slider3.jpg')">
-        <v-row class="fill-height" align="center" justify="center"> </v-row>
-      </v-carousel-item>
-      <v-carousel-item :src="require('../assets/img/home/slider1.jpg')">
-        <v-row class="fill-height" align="center" justify="center"> </v-row>
-      </v-carousel-item>
+    <v-carousel :height="height" hide-delimiter-background>
+      <v-carousel-item :src="`${BASE_API}/api/slider/${img}`" v-for="(img, index) in banner" :key="index"> </v-carousel-item>
     </v-carousel>
 
     <v-container>
@@ -50,23 +39,34 @@
 </template>
 
 <script>
-import { apiProductList } from '@/api'
+import { apiBanner, apiProductList } from '@/api'
 import cartMixin from '@/mixins/cart'
+
+const BASE_API = process.env.BASE_API
 
 export default {
   data() {
     return {
+      BASE_API,
+      height: 500,
+      banner: [],
       products: []
     }
   },
   mixins: [cartMixin],
   created() {
+    this.height = Math.min((window.innerWidth / 16) * 9, 600)
     this.apiProductList()
+    this.apiBanner()
   },
   methods: {
     async apiProductList() {
       const data = await apiProductList()
       this.products = data.data.product_list
+    },
+    async apiBanner() {
+      const data = await apiBanner()
+      this.banner = data.data.png_files
     }
   }
 }
