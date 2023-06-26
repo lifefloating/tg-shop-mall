@@ -69,7 +69,12 @@
               <div class="col-md-3 col-sm-6 col-xs-12" :key="index" v-for="(item, index) in products">
                 <v-hover v-slot:default="{ hover }">
                   <v-card class="mx-auto" color="grey lighten-4" max-width="600">
-                    <v-img class="white--text align-end" :aspect-ratio="16 / 9" height="200px" :src="`data:image/jpg;base64,${item.product_image}`">
+                    <v-img
+                      class="white--text align-end"
+                      :aspect-ratio="16 / 9"
+                      height="200px"
+                      :src="`data:image/jpg;base64,${item.product_image[0]}`"
+                    >
                       <v-card-title>{{ item.product_name }} </v-card-title>
                       <v-expand-transition>
                         <router-link

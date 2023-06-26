@@ -14,13 +14,13 @@
               <div class="col-12 col-md-3 col-sm-6 col-xs-6 text-center" v-for="(item, index) in products" :key="index">
                 <v-hover v-slot:default="{ hover }" open-delay="200">
                   <v-card :elevation="hover ? 16 : 2">
-                    <v-img class="white--text align-end" height="200px" :src="`data:image/jpg;base64,${item.product_image}`">
+                    <v-img class="white--text align-end" height="200px" :src="`data:image/jpg;base64,${item.product_image[0]}`">
                       <v-card-title>{{ item.product_name }}</v-card-title>
                     </v-img>
 
-                    <v-card-text class="text--primary text-center">
+                    <!-- <v-card-text class="text--primary text-center">
                       <div>{{ item.product_description }}</div>
-                    </v-card-text>
+                    </v-card-text> -->
 
                     <div class="text-center">
                       <router-link :to="{ name: 'Product', query: { product_id: item.product_id } }">

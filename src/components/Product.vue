@@ -4,7 +4,7 @@
       <div class="row">
         <div class="col-md-5 col-sm-5 col-xs-12">
           <v-carousel>
-            <v-carousel-item :src="`data:image/jpg;base64,${product.product_image}`"> </v-carousel-item>
+            <v-carousel-item :src="`data:image/jpg;base64,${item}`" v-for="(item, index) in product.product_image" :key="index"> </v-carousel-item>
           </v-carousel>
         </div>
         <div class="col-md-7 col-sm-7 col-xs-12">
@@ -21,9 +21,9 @@
               <v-rating v-model="rating" class="" background-color="warning lighten-3" color="warning" dense></v-rating>
               <span class="body-2 font-weight-thin">25 REVIEWS</span>
             </v-card-actions>
-            <p class="subtitle-1 font-weight-thin">
+            <!-- <p class="subtitle-1 font-weight-thin">
               {{ product.product_description }}
-            </p>
+            </p> -->
             <p class="title">数量</p>
 
             <div class="d-flex" style="margin-bottom: 16px">
@@ -78,18 +78,14 @@
         <div class="col-sm-12 col-xs-12 col-md-12">
           <v-tabs>
             <v-tab>商品介绍</v-tab>
-            <v-tab>商品规格</v-tab>
+            <!-- <v-tab>商品规格</v-tab> -->
             <v-tab>评价</v-tab>
             <v-tab-item>
               <p class="pt-10 subtitle-1 font-weight-thin">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ultricies
-                mi eget mauris pharetra et. Vel pretium lectus quam id leo in vitae turpis massa. Orci dapibus ultrices in iaculis nunc. At auctor
-                urna nunc id cursus metus. Integer feugiat scelerisque varius morbi enim nunc. Aliquam sem et tortor consequat id porta nibh venenatis
-                cras. Pellentesque pulvinar pellentesque habitant morbi tristique senectus et netus. Malesuada nunc vel risus commodo viverra
-                maecenas. Neque volutpat ac tincidunt vitae semper quis.
+                {{ product.product_description }}
               </p>
             </v-tab-item>
-            <v-tab-item>
+            <!-- <v-tab-item>
               <p class="pt-10 subtitle-1 font-weight-thin">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ultricies
                 mi eget mauris pharetra et. Vel pretium lectus quam id leo in vitae turpis massa. Orci dapibus ultrices in iaculis nunc. At auctor
@@ -97,7 +93,7 @@
                 cras. Pellentesque pulvinar pellentesque habitant morbi tristique senectus et netus. Malesuada nunc vel risus commodo viverra
                 maecenas. Neque volutpat ac tincidunt vitae semper quis.
               </p>
-            </v-tab-item>
+            </v-tab-item> -->
             <v-tab-item>
               <v-list three-line="true" avatar="true">
                 <v-list-item-group v-model="item" color="primary">
